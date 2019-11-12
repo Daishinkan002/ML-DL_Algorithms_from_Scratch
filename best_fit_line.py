@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
-import pandas as pd
 
+#Let the equation be      y = m*x + c ,where m is the slope and c is the intercept
 
 #Your Gradient at C function
 def get_gradient_at_c(x, y, c, m):
@@ -50,8 +50,6 @@ def calc_y_predicted(x,m,c):
 
 
 n = int(input("Enter total no. of points : "))
-x = [0,1,2,3,4,5,6,7,8,9]
-y = [1,3,2,5,7,8,8,9,10,12]
 
 
 
@@ -63,8 +61,6 @@ for i in range(n):
   print()
 
 
-
-#learning_rate = float(input("Enter learning_rate : "))
 learning_rate = 0.0002
 num_iterations = n*500
 c,m = gradient_descent(x,y,learning_rate,num_iterations)
