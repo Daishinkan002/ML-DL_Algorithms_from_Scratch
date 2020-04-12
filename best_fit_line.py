@@ -24,7 +24,7 @@ def get_gradient_at_m(x, y, c, m):
 #Your step_gradient function 
 def step_gradient(c_current, m_current, x, y,learning_rate):
     c_gradient = get_gradient_at_c(x, y, c_current, m_current)
-    m_gradient = get_gradient_at_m(x, y, m_current, m_current)
+    m_gradient = get_gradient_at_m(x, y, c_current, m_current)
     c = c_current - (learning_rate * c_gradient)
     m = m_current - (learning_rate * m_gradient)
     return [c, m]
