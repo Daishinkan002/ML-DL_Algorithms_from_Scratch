@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 class PCA:
-    # Just for the visualization ---> Not completed Yet
+    # Just for the visualization ---> Not framed Yet
     """
     [Returns the n-components present in PCA]
     """    
