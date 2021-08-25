@@ -40,12 +40,12 @@ class PCA:
         eigens = list(zip(eigenvalue,eigenvector))
         sorted_eigens = sorted(eigens, key=lambda x: x[0])
         print(sorted_eigens)
-        X = np.array(list(zip(X,y)))
-        line_1 = [[0, sorted_eigens[0][1][0]], [0, sorted_eigens[0][1][1]]]
-        line_2 = [[0, sorted_eigens[1][1][0]], [0, sorted_eigens[1][1][1]]]
-        plt.axline((0, 0), (sorted_eigens[0][1][0], sorted_eigens[0][1][1]))
-        feature_vector = (np.array(-eigenvector[0]).T)@X.T
-        plt.scatter(feature_vector, y)
+        data = np.array(list(zip(X,y)))
+        plt.axline((0, 0), (sorted_eigens[0][1][0], sorted_eigens[0][1][1]), label= 'Max value Eigenvector')
+        feature_vector = (np.array(-eigenvector[0]).T)@data.T
+        plt.scatter(feature_vector*eigens[0][1][0], feature_vector*eigens[0][1][1],c='g', label='Reduced Dimension Data')
+        plt.scatter(X,y, c='coral', label='True Data')
+        plt.legend()
         plt.show()
 
 
@@ -60,5 +60,3 @@ if __name__ == "__main__":
 
     model = PCA(1)
     model.fit(X,y)
-    plt.scatter(X,y)
-    plt.show()
