@@ -37,8 +37,14 @@ class PCA:
         X,y = self.centering(X,y)
         covariance_matrix = self.find_cov_matrix(X,y)
         eigenvalue, eigenvector = eig(covariance_matrix)
+        eigens = list(zip(eigenvalue,eigenvector))
+        sorted_eigens = sorted(eigens, key=lambda x: x[0])
+        print(sorted_eigens)
         X = np.array(list(zip(X,y)))
-        feature_vector = (np.array(eigenvector[0]).T)@X.T
+        line_1 = [[0, sorted_eigens[0][1][0]], [0, sorted_eigens[0][1][1]]]
+        line_2 = [[0, sorted_eigens[1][1][0]], [0, sorted_eigens[1][1][1]]]
+        plt.axline((0, 0), (sorted_eigens[0][1][0], sorted_eigens[0][1][1]))
+        feature_vector = (np.array(-eigenvector[0]).T)@X.T
         plt.scatter(feature_vector, y)
         plt.show()
 
