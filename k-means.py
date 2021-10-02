@@ -67,7 +67,7 @@ class k_means:
 
 
 if __name__ == "__main__":
-    dataset=pd.read_csv("dataset.csv")
+    dataset=pd.read_csv("Datasets/dataset.csv")
     features = dataset[['Annual Income (k$)','Spending Score (1-100)']]
     plt.scatter(features['Annual Income (k$)'],features['Spending Score (1-100)'])
     plt.show()

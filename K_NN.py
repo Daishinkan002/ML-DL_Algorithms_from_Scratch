@@ -24,6 +24,25 @@ class KNN(object):
             dist += (a[i]-b[i])**2
         res = math.sqrt(dist)
         return res
+
+    def cosine_similarity_distance(self, xi, xq):
+        length_xi = len(xi)
+        mag_xi_square = 0
+        for j in range(length_xi):
+            mag_xi_square += xi[j]
+        mag_xi = math.sqrt(mag_xi_square)
+        xi = np.array(xi)/mag_xi
+
+
+        length_xq = len(xq)
+        mag_xq_square = 0
+        for j in range(length_xq):
+            mag_xq_square += xq[j]
+        mag_xq = math.sqrt(mag_xq_square)
+        xq = np.array(xq)/mag_xq
+
+        return 1-(xi @ xq.T)
+
     
     def fit(self, X, y):
         self.X_train = X_train.to_numpy()
@@ -92,3 +111,4 @@ if __name__ == "__main__":
     model = KNN(k)
     model.fit(X_train, y_train)
     print(f"Model Accuracy (when k = {k}) is {model.score(X_test, y_test)}")
+
