@@ -7,9 +7,8 @@ from sklearn.decomposition import PCA as library_pca
 
 
 class PCA:
-    # Just for the visualization ---> Not framed Yet
     """
-    [Returns the n-components present in PCA]
+    [Returns top n-dimensions extracted using PCA]
     """    
     def __init__(self, n_components):
         self.n_components = n_components
