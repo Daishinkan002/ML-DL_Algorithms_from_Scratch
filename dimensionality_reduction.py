@@ -10,43 +10,46 @@ class PCA:
     """
     [Returns the n-components present in PCA]
     """    
-    def __init__(self, n_dimensions):
-        self.n_dimensions = n_dimensions
+    def __init__(self, n_components):
+        self.n_components = n_components
     
     def mean(self, X):
         return sum(X)/len(X)
 
-    def centering(self, X, y):
-        return X-self.mean(X), y-self.mean(y)
+    def centering(self, X):
+        return X-np.mean(X, axis = 0)
     
-    def find_covariance(self, X,y):
-        mean_X = self.mean(X)
-        mean_y = self.mean(y)
-        n = len(X)
-        return sum([(X[i]-mean_X)*(y[i]-mean_y) for i in range(n)])/(n-1)
 
-    def find_cov_matrix(self, X, y):
-        cov_matrix = [[self.find_covariance(X,X), self.find_covariance(X,y)], [self.find_covariance(y,X), self.find_covariance(y,y)]]
+    def get_cov(self, X):
+        cov_matrix = np.cov(X)
         return cov_matrix
     
     def sort_eigenvalue(self, eigens):
         pass
 
-
-    def fit(self, X, y):
-        X,y = self.centering(X,y)
-        covariance_matrix = self.find_cov_matrix(X,y)
-        eigenvalue, eigenvector = eig(covariance_matrix)
-        eigens = list(zip(eigenvalue,eigenvector))
-        sorted_eigens = sorted(eigens, key=lambda x: x[0])
-        print(sorted_eigens)
-        data = np.array(list(zip(X,y)))
-        plt.axline((0, 0), (sorted_eigens[0][1][0], sorted_eigens[0][1][1]), label= 'Max value Eigenvector')
-        feature_vector = (np.array(-eigenvector[0]).T)@data.T
-        plt.scatter(feature_vector*eigens[0][1][0], feature_vector*eigens[0][1][1],c='g', label='Reduced Dimension Data')
-        plt.scatter(X,y, c='coral', label='True Data')
+    def transform(self, X):
+        # print(X)
+        X = self.centering(X)
+        feature_vector = (self.top_n_eigenvectors@X.T).T # ((n_components*m)*(m*n)).T
+        plt.scatter(X[:,0], X[:,1], label='old_data', c='orange')
+        plt.scatter(feature_vector[:,0], feature_vector[:,1], label = 'new_data', c='b')
         plt.legend()
+        plt.savefig('Images/PCA_fit.png')
         plt.show()
+        return feature_vector
+
+    def fit(self, X):
+        X= self.centering(X) # n*m
+        covariance_matrix = self.get_cov(X.T) # m*m
+
+        eigenvalue, eigenvector = np.linalg.eig(covariance_matrix)
+        eigenvector = eigenvector.T
+        sorted_eigens_args = np.argsort(-eigenvalue)
+        eigens = list(zip(eigenvalue,eigenvector))
+        sorted_eigens = sorted(eigens, key=lambda x: x[0], reverse = True)
+        sorted_eigenvectors = [eigen[1] for eigen in sorted_eigens]
+        top_n_eigenvectors = sorted_eigenvectors[:self.n_components]
+        self.top_n_eigenvectors = top_n_eigenvectors
 
 
 
@@ -55,8 +58,14 @@ class PCA:
 
 if __name__ == "__main__":
 
-    X = np.array([2.5, 0.5, 2.2, 1.9, 3.1, 2.3, 2, 1, 1.5, 1.1])
-    y = np.array([2.4, 0.7, 2.9, 2.2, 3.0, 2.7, 1.6, 1.1, 1.6, 0.9])
+    X = np.array([[2.5, 0.5, 2.2, 1.9, 3.1, 2.3, 2, 1, 1.5, 1.1]])
+    y = np.array([[2.4, 0.7, 2.9, 2.2, 3.0, 2.7, 1.6, 1.1, 1.6, 0.9]])
 
-    model = PCA(1)
-    model.fit(X,y)
+    data = np.concatenate((X,y), axis = 0).T
+    print("Original data --> \n", data)
+    # print(data) #n*m, m = 2
+    plt.show()
+    model = PCA(2)
+    model.fit(data)
+    X_transformed = model.transform(data)
+    print("Transformed Data --> \n",X_transformed)
