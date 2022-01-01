@@ -1,2 +1,2 @@
-# ML_Algorithms
-Basic Algorithms Of Machine Learning
+# ML-DL Algorithms from Scratch
+Contains code of popular Machine Learning and Deep Learning Algorithms
